@@ -27,7 +27,7 @@ public class ProdutosDAO {
     ArrayList<ProdutosDTO> listagem = new ArrayList<>();
     
     public void cadastrarProduto (ProdutosDTO produto) throws SQLException{
-        
+        try{
             dbctx = conexao.connectDB();
             st = dbctx.prepareStatement("INSERT INTO leiloestdsat.produtos (nome, valor, status) VALUES (?, ?, ?)");
             st.setString(1, produto.getNome());
@@ -35,7 +35,12 @@ public class ProdutosDAO {
             st.setString(3, produto.getStatus());
             
             status = st.executeUpdate();
-            
+            JOptionPane.showMessageDialog(null, "Produto Cadastrado com Sucesso!");
+
+        } 
+        catch (SQLException e){
+            JOptionPane.showMessageDialog(null, "Erro ao cadastrar o produto: " + e.getMessage());
+        }
         
         
     }

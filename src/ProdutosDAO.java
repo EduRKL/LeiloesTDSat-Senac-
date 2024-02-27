@@ -14,6 +14,7 @@ import javax.swing.JOptionPane;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Set;
 
 
 public class ProdutosDAO {
@@ -26,7 +27,7 @@ public class ProdutosDAO {
     
     ArrayList<ProdutosDTO> listagem = new ArrayList<>();
     
-    public void cadastrarProduto (ProdutosDTO produto) throws SQLException{
+    public void cadastrarProduto (ProdutosDTO produto){
         try{
             dbctx = conexao.connectDB();
             st = dbctx.prepareStatement("INSERT INTO leiloestdsat.produtos (nome, valor, status) VALUES (?, ?, ?)");
@@ -47,7 +48,26 @@ public class ProdutosDAO {
     
     public ArrayList<ProdutosDTO> listarProdutos(){
         
-        return listagem;
+        try{
+            ArrayList<ProdutosDTO> listaProdutos = new ArrayList<>();
+            dbctx = conexao.connectDB();
+            st = dbctx.prepareStatement("SELECT * FROM leiloestdsat.produtos");
+            rs = st.executeQuery();
+            
+            while (rs.next()){
+            ProdutosDTO produto = new ProdutosDTO();
+            produto.setId(rs.getInt("id"));
+            produto.setNome(rs.getString("nome"));
+            produto.setValor(rs.getInt("valor"));
+            produto.setStatus(rs.getString("status"));
+            listagem.add(produto);
+            }
+            return listagem;
+        }
+        catch (SQLException e){
+            System.out.println("Erro ao conectar: " + e.getMessage());
+            return null;
+            }
     }
     
     

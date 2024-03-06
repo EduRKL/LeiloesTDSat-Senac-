@@ -70,8 +70,34 @@ public class ProdutosDAO {
             }
     }
     
-    
-    
+    public boolean venderProduto(int id){
+        try{
+        dbctx = conexao.connectDB();
+        st = dbctx.prepareStatement("SELECT * FROM leiloestdsat.produtos where id = ?");
+        st.setInt(1,id);
+        rs = st.executeQuery();
         
+        if(rs.next()){
+        String status = rs.getString("status");
+        }
+        
+        if(!"Vendido".equals(status)){
+            st = dbctx.prepareStatement("UPDATE leiloestdsat.produtos SET status = 'Vendido' where id= ? ");
+            st.setInt(1, id);
+            int linhasAfetadas = st.executeUpdate();
+            if(linhasAfetadas > 0){
+                JOptionPane.showMessageDialog(null, "Venda realizada com sucesso!");
+            }
+            return true;
+        }
+        }
+        catch (SQLException e){
+        System.out.println("Erro ao conectar: " + e.getMessage());
+        }
+        
+        JOptionPane.showMessageDialog(null, "Venda não realizada!");
+        return false;
+        
+    }      
 }
 

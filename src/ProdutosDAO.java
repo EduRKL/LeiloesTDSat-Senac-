@@ -70,6 +70,30 @@ public class ProdutosDAO {
             }
     }
     
+    public ArrayList<ProdutosDTO> listarProdutosVendidos(){
+        
+        try{
+            ArrayList<ProdutosDTO> listaProdutos = new ArrayList<>();
+            dbctx = conexao.connectDB();
+            st = dbctx.prepareStatement("SELECT * FROM leiloestdsat.produtos WHERE status = 'Vendido'");
+            rs = st.executeQuery();
+            
+            while (rs.next()){
+            ProdutosDTO produto = new ProdutosDTO();
+            produto.setId(rs.getInt("id"));
+            produto.setNome(rs.getString("nome"));
+            produto.setValor(rs.getInt("valor"));
+            produto.setStatus(rs.getString("status"));
+            listagem.add(produto);
+            }
+            return listagem;
+        }
+        catch (SQLException e){
+            System.out.println("Erro ao conectar: " + e.getMessage());
+            return null;
+            }
+    }
+    
     public boolean venderProduto(int id){
         try{
         dbctx = conexao.connectDB();
